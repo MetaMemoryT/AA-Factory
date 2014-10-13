@@ -1,0 +1,39 @@
+<html>
+<head>
+	<script type="text/javascript" src="lib/jquery.js"></script>
+	<script type="text/javascript" src="src/utilities.js"></script>
+	<script type="text/javascript" src="src/bootstrap.js" ></script>
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body>
+	<h1>Hello World</h1>
+	<div id="step-1">
+<!-- 		<h2>Step 1</h2>
+		<p>Complete form to initial a game.</p>
+		<form id="gameForm">
+			<label for="level">level</label>
+			<input id="level" type="text"/>
+			<button type="submit">submit</button>
+		</form> -->
+
+	</div>
+	<div id="gameControls">
+		<button id="run">Run Game</button>
+		<button id="sumbitCode">Submit Code</button>
+	</div>
+	<div id="editorContainer">
+		<textarea rows="8" cols="100" id="editor">
+function moveRobot (x,y,tiles, info) {
+	var result = (info.lastMove == Directions.DOWN) ? Directions.RIGHT : Directions.DOWN;
+	info.lastMove = result;
+	return result;
+}
+		</textarea>
+	</div>
+	<div id="gridContainer">
+		<table id="grid" >
+			<tbody id="gridBody"></tbody>
+		</table>
+	</div>
+</body>
+</html>
