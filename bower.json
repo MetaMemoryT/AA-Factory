@@ -1,0 +1,23 @@
+{
+  "name": "robots",
+  "version": "0.0.1",
+  "authors": [
+    "Sean Usick <sean258@gmail.com>"
+  ],
+  "description": "robots",
+  "moduleType": [
+    "amd"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "observe-js": "~0.4.2"
+  }
+}
