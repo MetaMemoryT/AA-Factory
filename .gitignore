@@ -1,3 +1,4 @@
+.externalToolBuilders
 bower_components
 *.sublime-project
 *.sublime-workspace
