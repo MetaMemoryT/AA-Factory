@@ -1,1 +1,1 @@
-{"ide":{"scriptPaths":[{"type":"FILE","path":"src/main.js"}]},"libs":["browser","ecma5","jquery"]}
+{"ide":{"scriptPaths":[{"type":"FILE","path":"src/model.js"}]},"libs":["browser","ecma5","jquery"]}

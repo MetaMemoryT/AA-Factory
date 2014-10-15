@@ -1,15 +1,11 @@
 <html>
 <head>
-	<script type="text/javascript" src="lib/jquery.js"></script>
-	<script src="bower_components/observe-js/src/observe.js"></script>
-	<script type="text/javascript" src="src/utilities.js"></script>
-	<script type="text/javascript" src="src/main.js" ></script>
-	<link rel="stylesheet" type="text/css" href="css/style.css">
+<link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <body>
 	<h1>Hello World</h1>
 	<div id="step-1">
-<!-- 		<h2>Step 1</h2>
+		<!-- 		<h2>Step 1</h2>
 		<p>Complete form to initial a game.</p>
 		<form id="gameForm">
 			<label for="level">level</label>
@@ -20,23 +16,29 @@
 	</div>
 	<div id="gameControls">
 		<button id="run">Run Game</button>
+		<button id="step">Step</button>
 		<button id="pause">Pause Game</button>
 		<button id="resume">Resume Game</button>
-		<button id="sumbitCode">Submit Code</button>
+		<button id="saveLoad">Save + Load</button>
 	</div>
 	<div id="editorContainer">
 		<textarea rows="8" cols="100" id="editor">
-function moveRobot (x,y,tiles, info) {
-	var result = (info.lastMove == Directions.DOWN) ? Directions.RIGHT : Directions.DOWN;
-	info.lastMove = result;
-	return result;
+function (x,y,tiles, info) {
+  info.lastMove = (info.lastMove == Directions.DOWN) ? Directions.RIGHT : Directions.DOWN;
+  return info.lastMove;
 }
 		</textarea>
 	</div>
 	<div id="gridContainer">
-		<table id="grid" >
+		<table id="grid">
 			<tbody id="gridBody"></tbody>
 		</table>
 	</div>
+	<script src="lib/jquery.js"></script>
+	<script src="bower_components/observe-js/src/observe.js"></script>
+	<script src="lib/bimap.js"></script>
+	<script src="src/model.js"></script>
+	<script src="src/view-model.js"></script>
+	<script src="src/controller.js"></script>
 </body>
 </html>

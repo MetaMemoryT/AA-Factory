@@ -2,6 +2,9 @@ table {
 	border-collapse: collapse;
 	padding: 0px;
 }
+textarea {
+	float: left;
+}
 table, td {
 	border:1px solid black;
 	padding: 0px;
@@ -12,9 +15,12 @@ table, td {
 	height: 25px;
 }
 
-.land {
+.empty {
 	background-color: grey;
 }
 .robot {
 	background-color: red;
+}
+.target {
+	background-color: green;
 }
