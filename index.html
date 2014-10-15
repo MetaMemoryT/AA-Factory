@@ -1,19 +1,22 @@
 <html>
 <head>
-<link rel="stylesheet" type="text/css" href="css/style.css">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!--<link rel="stylesheet" href="css/style.css">-->
+	<link rel="stylesheet" href="lib/jquery.mobile-1.4.4/jquery.mobile-1.4.4.min.css">
 </head>
 <body>
-	<h1>Hello World</h1>
-	<div id="step-1">
-		<!-- 		<h2>Step 1</h2>
-		<p>Complete form to initial a game.</p>
-		<form id="gameForm">
-			<label for="level">level</label>
-			<input id="level" type="text"/>
-			<button type="submit">submit</button>
-		</form> -->
-
-	</div>
+	<div data-role="page" id="pageone">
+  		<div data-role="header">
+    		<div data-role="navbar">
+      		<ul>
+        		<li><a href="#constantBehave">L1: Constant Behavior</a></li>
+        		<li><a href="#addingState">L2: Adding State</a></li>
+      		</ul>
+		</div>
+  	</div>
+  <div data-role="main" class="ui-content">
+    <p>My Content..</p>
+  </div>
 	<div id="gameControls">
 		<button id="run">Run Game</button>
 		<button id="step">Step</button>
@@ -34,8 +37,37 @@ function (x,y,tiles, info) {
 			<tbody id="gridBody"></tbody>
 		</table>
 	</div>
-	<script src="lib/jquery.js"></script>
+	<div id="levels" style="display: none;">
+		<x-level name="Constant Behavior">
+			<h2>Learning Outcome</h2>
+			<p>This level will familiarize yourself with the UI.</p>
+			<p>You will learn how to edit the code and run the level.</p>
+			<p>You 
+			<h2>Goal</h2>
+			<p>Get your robot to land on any of the green squares.</p>
+			<x-answer>
+			function (x,y,tiles, info) {
+  				return Directions.RIGHT;
+			}
+			</x-answer>
+		</x-level>
+		<x-level name="Adding State">
+			<h2>Learning Outcome</h2>
+			<p>You will add state to your autonomaus agennt (AA), it will remember the last move it made.
+			It will base its next move on that information.</p>
+			<h2>Goal</h2>
+			<p>Get your robot to land on any of the green squares.</p>
+			<x-answer>
+			function (x,y,tiles, info) {
+				info.lastMove = (info.lastMove == Directions.DOWN) ? Directions.RIGHT : Directions.DOWN;
+				return info.lastMove;
+			}
+			</x-answer>
+		</x-level>
+	</div>
+	<script src="bower_components/jquery/dist/jquery.min.js"></script>
 	<script src="bower_components/observe-js/src/observe.js"></script>
+	<script src="lib/jquery.mobile-1.4.4/jquery.mobile-1.4.4.min.js"></script>
 	<script src="lib/bimap.js"></script>
 	<script src="src/model.js"></script>
 	<script src="src/view-model.js"></script>
