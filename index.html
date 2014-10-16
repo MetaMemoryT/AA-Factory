@@ -1,76 +1,92 @@
 <html>
+
 <head>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<!--<link rel="stylesheet" href="css/style.css">-->
-	<link rel="stylesheet" href="lib/jquery.mobile-1.4.4/jquery.mobile-1.4.4.min.css">
+  <title>Learning AA with JS</title>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+
+  <script src="bower_components/platform/platform.js"></script>
+
+  <!-- <link rel="import" href="bower_components/font-roboto/roboto.html"> -->
+  <link rel="import" href="bower_components/core-header-panel/core-header-panel.html">
+  <link rel="import" href="bower_components/core-toolbar/core-toolbar.html">
+  <link rel="import" href="bower_components/paper-tabs/paper-tabs.html">
+  <link rel="import" href="bower_components/core-icons/core-icons.html">
+  <link rel="import" href="bower_components/paper-icon-button/paper-icon-button.html">
+  <link rel="import" href="bower_components/core-animated-pages/core-animated-pages.html">
+  <link rel="import" href="bower_components/core-animated-pages/core-animated-pages/transitions/slide-from-right.html">
+  <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
-	<div data-role="page" id="pageone">
-  		<div data-role="header">
-    		<div data-role="navbar">
-      		<ul>
-        		<li><a href="#constantBehave">L1: Constant Behavior</a></li>
-        		<li><a href="#addingState">L2: Adding State</a></li>
-      		</ul>
-		</div>
-  	</div>
-  <div data-role="main" class="ui-content">
-    <p>My Content..</p>
-  </div>
-	<div id="gameControls">
-		<button id="run">Run Game</button>
-		<button id="step">Step</button>
-		<button id="pause">Pause Game</button>
-		<button id="resume">Resume Game</button>
-		<button id="saveLoad">Save + Load</button>
-	</div>
-	<div id="editorContainer">
-		<textarea rows="8" cols="100" id="editor">
-function (x,y,tiles, info) {
-  info.lastMove = (info.lastMove == Directions.DOWN) ? Directions.RIGHT : Directions.DOWN;
-  return info.lastMove;
-}
-		</textarea>
-	</div>
-	<div id="gridContainer">
-		<table id="grid">
-			<tbody id="gridBody"></tbody>
-		</table>
-	</div>
-	<div id="levels" style="display: none;">
-		<x-level name="Constant Behavior">
-			<h2>Learning Outcome</h2>
-			<p>This level will familiarize yourself with the UI.</p>
-			<p>You will learn how to edit the code and run the level.</p>
-			<p>You 
-			<h2>Goal</h2>
-			<p>Get your robot to land on any of the green squares.</p>
-			<x-answer>
-			function (x,y,tiles, info) {
-  				return Directions.RIGHT;
-			}
-			</x-answer>
-		</x-level>
-		<x-level name="Adding State">
-			<h2>Learning Outcome</h2>
-			<p>You will add state to your autonomaus agennt (AA), it will remember the last move it made.
-			It will base its next move on that information.</p>
-			<h2>Goal</h2>
-			<p>Get your robot to land on any of the green squares.</p>
-			<x-answer>
-			function (x,y,tiles, info) {
-				info.lastMove = (info.lastMove == Directions.DOWN) ? Directions.RIGHT : Directions.DOWN;
-				return info.lastMove;
-			}
-			</x-answer>
-		</x-level>
-	</div>
-	<script src="bower_components/jquery/dist/jquery.min.js"></script>
-	<script src="bower_components/observe-js/src/observe.js"></script>
-	<script src="lib/jquery.mobile-1.4.4/jquery.mobile-1.4.4.min.js"></script>
-	<script src="lib/bimap.js"></script>
-	<script src="src/model.js"></script>
-	<script src="src/view-model.js"></script>
-	<script src="src/controller.js"></script>
+
+<body unresolved>
+  <core-header-panel>
+
+    <core-toolbar layout vertical center>
+      <paper-icon-button icon="arrow-back"></paper-icon-button>
+      <paper-tabs id="tabs" selected="all" self-end>
+        <paper-tab name="constantBehave">L1: Constant Behavior</paper-tab>
+      </paper-tabs>
+
+      <paper-icon-button icon="arrow-forward"></paper-icon-button>
+    </core-toolbar>
+
+		<!-- style="display: none;" -->
+
+    <core-animated-pages >
+      <section name="Constant Behavior">
+      <div>
+        <h2>Learning Outcome</h2>
+        <p>This level will familiarize yourself with the UI.</p>
+        <p>You will learn how to edit the code and run the level.</p>
+        <p>You
+          <h2>Goal</h2>
+          <p>Get your robot to land on any of the green squares.</p>
+          <x-answer>
+            function (x,y,tiles, info) { return Directions.RIGHT; }
+          </x-answer>
+        </div>
+      </section>
+      <section name="Adding State">
+            <div>
+        <h2>Learning Outcome</h2>
+        <p>You will add state to your autonomaus agennt (AA), it will remember the last move it made. It will base its next move on that information.</p>
+        <h2>Goal</h2>
+        <p>Get your robot to land on any of the green squares.</p>
+        <x-answer>
+          function (x,y,tiles, info) { info.lastMove = (info.lastMove == Directions.DOWN) ? Directions.RIGHT : Directions.DOWN; return info.lastMove; }
+        </x-answer>
+        </div>
+      </section>
+    </div>
+
+    <div class="container" layout vertical center>
+      <div id="gameControls">
+        <button id="run">Run Game</button>
+        <button id="step">Step</button>
+        <button id="pause">Pause Game</button>
+        <button id="resume">Resume Game</button>
+        <button id="saveLoad">Save + Load</button>
+      </div>
+      <div>
+        <div id="editorContainer">
+          <textarea rows="8" cols="100" id="editor">
+            function (x,y,tiles, info) { info.lastMove = (info.lastMove == Directions.DOWN) ? Directions.RIGHT : Directions.DOWN; return info.lastMove; }
+          </textarea>
+        </div>
+        <div id="gridContainer">
+          <table id="grid">
+            <tbody id="gridBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </core-header-panel>
+
+  <script src="bower_components/jquery/dist/jquery.min.js"></script>
+  <script src="bower_components/observe-js/src/observe.js"></script>
+  <script src="lib/bimap.js"></script>
+  <script src="src/model.js"></script>
+  <script src="src/view-model.js"></script>
+  <script src="src/controller.js"></script>
 </body>
+
 </html>
