@@ -11,6 +11,7 @@ Make a node server which serves up a specific level.  This level will have a ske
 ### installation
 requires chrome > M38 for for..of loops
 bower install
+download "jquery.mobile-1.4.4" and place in lib folder and unpack
 
 ### roadmap
 - Pause Resume with correct disabled/enabled
