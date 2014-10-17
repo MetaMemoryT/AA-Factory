@@ -24,7 +24,6 @@ Robot.prototype.move = function(tiles) {
   return this.lambda.call(this, this.x, this.y, tiles, this.userData);
 }
 
-
 function Map(x, y, robots, level) {
   this.level = level;
   this.robots = robots;
