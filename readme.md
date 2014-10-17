@@ -19,6 +19,8 @@ bower install
 - bring back alert win / lose: out of bounds
 - email
 - 3 levels working
+codemirror
+console.log
 decision making
 inter-agent communication
 seek and destroy
