@@ -37,7 +37,8 @@ function setLDescVis(bool) {
 var levels = [
   Level1,
   Level2,
-  Level3
+  Level3,
+  Level4
 ]
 
 function setLevel(levelI) {

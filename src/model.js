@@ -144,15 +144,29 @@ Level2.prototype.testVictory = function() {
   return false;
 }
 
+/**
+ * seek and destroy
+ */
 function Level3() {
   Level.call(this, 5);
-  this.name = "Decision Making";
+  this.name = "Seek and Destroy";
   this.answers = [
     function(x, y, tiles, info) {
       // level 3, answer 1
       return null;
     }
   ]
-
 }
 Level3.prototype = Object.create(Level.prototype);
+
+function Level4() {
+  Level.call(this, 5);
+  this.name = "Lion Pack";
+  this.answers = [
+    function(x, y, tiles, info) {
+      // level 4, answer 1
+      return null;
+    }
+  ]
+}
+Level4.prototype = Object.create(Level.prototype);
