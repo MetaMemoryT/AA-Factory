@@ -15,13 +15,9 @@ bower install
 ### roadmap
 - Pause Resume with correct disabled/enabled
 - Submit Code -> Save + Load
-- level 1 + 2 w/ winning code inserted
-- bring back alert win / lose: out of bounds
-- email
-decision making
-inter-agent communication
-seek and destroy
+level 1 + 2 w/ winning code inserted
 1 level for each of the five classes http://en.wikipedia.org/wiki/Intelligent_agent#Classes_of_intelligent_agents
+bring back alert win / lose: out of bounds
 Load
 level nav
 * NOTE: \[Run Game] also Saves and Loads your code into the game
