@@ -135,7 +135,17 @@ function Level2() {
       // level 2, answer 1
       info.lastMove = (info.lastMove == Directions.DOWN) ? Directions.RIGHT : Directions.DOWN;
       return info.lastMove;
-    }
+    },
+     function (x, y, tiles, info) {
+        function Foo () {this.x = 0};
+        // level 2, answer 1
+        info.foo = info.foo || new Foo();
+        info.foo += 1;
+        // test console.log()
+        console.log(info.foo);
+        info.lastMove = (info.lastMove == Directions.DOWN) ? Directions.RIGHT : Directions.DOWN;
+        return info.lastMove;
+      } 
   ]
   this.map.tiles[this.map.tiles.length - 1][this.map.tiles.length - 1] = mapColor.key("target");
 }
