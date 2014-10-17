@@ -1,18 +1,18 @@
 // model should know nothing of the view or rendering, (no DOM interaction)
 var Directions = {
-  LEFT: 0,
-  UP: 1,
-  RIGHT: 2,
-  DOWN: 3
+  LEFT:0
+  , UP:1
+  , RIGHT:2
+  , DOWN: 3
 }
 var EndLevelState = {
   WIN: "win",
   LOSE: "lose"
 }
 var mapColor = new BiMap();
-mapColor.push("empty", 0);
-mapColor.push("target", 1);
-mapColor.push("robot", 2);
+mapColor.push("empty",0);
+mapColor.push("target",1);
+mapColor.push("robot",2);
 
 function Robot(x, y) {
   this.x = x;
@@ -23,9 +23,7 @@ function Robot(x, y) {
 Robot.prototype.move = function(tiles) {
   return this.lambda.call(this, this.x, this.y, tiles, this.userData);
 }
-
-function Map(x, y, robots, level) {
-  this.level = level;
+function Map(x, y, robots) {
   this.robots = robots;
   this.width = x;
   this.height = y;
@@ -55,34 +53,34 @@ Map.prototype.step = function() {
     var dir = r.move(this.tiles);
     this.tiles[r.x][r.y] = mapColor.key("empty");
     switch (dir) {
-      case Directions.LEFT:
-        if (r.x <= 0) {
-          this.level.endMessage = this.makeErrorMessage(r.x, r.y, "left");
-          this.level.endLevelState = EndLevelState.LOSE;
-        } else
-          r.x -= 1;
-        break;
-      case Directions.RIGHT:
-        if (r.x + 1 > (this.width - 1)) {
-          this.level.endMessage = this.makeErrorMessage(r.x, r.y, "right");
-          this.level.endLevelState = EndLevelState.LOSE;
-        } else
-          r.x += 1;
-        break;
-      case Directions.UP:
-        if (r.y - 1 < 0) {
-          this.level.endLevelState = EndLevelState.LOSE;
-          this.level.endMessage = this.makeErrorMessage(r.x, r.y, "up");
-        } else
-          r.y -= 1;
-        break;
-      case Directions.DOWN:
-        if (r.y + 1 > (this.height - 1)) {
-          this.level.endMessage = this.makeErrorMessage(r.x, r.y, "down");
-          this.level.endLevelState = EndLevelState.LOSE;
-        } else
-          r.y += 1;
-        break;
+    case Directions.LEFT:
+      if (r.x - 1 < 0) {
+        this.endGame = true;
+        this.endMessage = this.makeErrorMessage(r.x, r.y, "left")
+      } else
+        r.x -= 1;
+      break;
+    case Directions.RIGHT:
+      if (r.x + 1 > (this.width - 1)) {
+        this.endGame = true;
+        this.endMessage = this.makeErrorMessage(r.x, r.y, "right");
+      } else
+        r.x += 1;
+      break;
+    case Directions.UP:
+      if (r.y - 1 < 0) {
+        this.endGame = true;
+        this.endMessage = this.makeErrorMessage(r.x, r.y, "up");
+      } else
+        r.y -= 1;
+      break;
+    case Directions.DOWN:
+      if (r.y + 1 > (this.height - 1)) {
+        this.endGame = true;
+        this.endMessage = this.makeErrorMessage(r.x, r.y, "down");
+      } else
+        r.y += 1;
+      break;
     }
     this.tiles[r.x][r.y] = mapColor.key("robot");
   }
@@ -92,7 +90,7 @@ Map.prototype.step = function() {
 function Level(size) {
   this.endMessage = null;
   this.endLevelState = null;
-  this.map = new Map(size, size, [new Robot(0, 0)], this);
+  this.map = new Map(size, size, [ new Robot(0, 0) ]);
   this.turn = 0;
 }
 Level.prototype.step = function() {
@@ -101,58 +99,15 @@ Level.prototype.step = function() {
   if (this.testVictory()) this.endLevelState = EndLevelState.WIN;
 }
 
+// level 1
 function Level1() {
   Level.call(this, 5);
-  this.name = "Constant Behaviour"
-  this.answers = [
-    function(x, y, tiles, info) {
-      // level 1, answer 1
-      return Directions.RIGHT;
-    },
-    function(x, y, tiles, info) {
-      // level 1, answer 2
-      // test losing message
-      return Directions.LEFT;
-    }
-  ]
   for (var i = 0; i < this.map.tiles.length; i++)
-    this.map.tiles[this.map.tiles.length - 1][i] = mapColor.key("target");
+    this.map.tiles[this.map.tiles.length-1][i] = mapColor.key("target");
 }
 Level1.prototype = Object.create(Level.prototype);
 Level1.prototype.testVictory = function() {
   for (var r of this.map.robots)
-    if (r.x == (this.map.tiles.length - 1)) return true;
+    if (r.x == (this.map.tiles.length-1)) return true;
   return false;
 }
-
-function Level2() {
-  Level.call(this, 5);
-  this.name = "Adding State"
-  this.answers = [
-    function(x, y, tiles, info) {
-      // level 2, answer 1
-      info.lastMove = (info.lastMove == Directions.DOWN) ? Directions.RIGHT : Directions.DOWN;
-      return info.lastMove;
-    }
-  ]
-  this.map.tiles[this.map.tiles.length - 1][this.map.tiles.length - 1] = mapColor.key("target");
-}
-Level2.prototype = Object.create(Level.prototype);
-Level2.prototype.testVictory = function() {
-  for (var r of this.map.robots)
-    if (r.x == (this.map.tiles.length - 1)) return true;
-  return false;
-}
-
-function Level3() {
-  Level.call(this, 5);
-  this.name = "Decision Making";
-  this.answers = [
-    function (x, y, tiles, info) {
-      // level 3, answer 1
-      return null;
-    }
-  ]
-
-}
-Level3.prototype = Object.create(Level.prototype);
