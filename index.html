@@ -33,27 +33,27 @@
 
     <core-animated-pages >
       <section name="Constant Behavior">
-      <div>
-        <h2>Learning Outcome</h2>
-        <p>This level will familiarize yourself with the UI.</p>
-        <p>You will learn how to edit the code and run the level.</p>
-        <p>You
+        <div>
+          <h2>Learning Outcome</h2>
+          <p>This level will familiarize yourself with the UI.</p>
+          <p>You will learn how to edit the code and run the level.</p>
+          <p>You
+            <h2>Goal</h2>
+            <p>Get your robot to land on any of the green squares.</p>
+            <x-answer>
+              function (x,y,tiles, info) { return Directions.RIGHT; }
+            </x-answer>
+          </div>
+      </section>
+      <section name="Adding State">
+        <div>
+          <h2>Learning Outcome</h2>
+          <p>You will add state to your autonomaus agennt (AA), it will remember the last move it made. It will base its next move on that information.</p>
           <h2>Goal</h2>
           <p>Get your robot to land on any of the green squares.</p>
           <x-answer>
-            function (x,y,tiles, info) { return Directions.RIGHT; }
-          </x-answer>
-        </div>
-      </section>
-      <section name="Adding State">
-            <div>
-        <h2>Learning Outcome</h2>
-        <p>You will add state to your autonomaus agennt (AA), it will remember the last move it made. It will base its next move on that information.</p>
-        <h2>Goal</h2>
-        <p>Get your robot to land on any of the green squares.</p>
-        <x-answer>
           function (x,y,tiles, info) { info.lastMove = (info.lastMove == Directions.DOWN) ? Directions.RIGHT : Directions.DOWN; return info.lastMove; }
-        </x-answer>
+          </x-answer>
         </div>
       </section>
     </div>
