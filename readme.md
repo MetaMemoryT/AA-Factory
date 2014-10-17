@@ -18,6 +18,7 @@ bower install
 - level 1 + 2 w/ winning code inserted
 - bring back alert win / lose: out of bounds
 - email
+- 3 levels working
 decision making
 inter-agent communication
 seek and destroy
