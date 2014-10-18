@@ -75,7 +75,7 @@
         <button id="pause">Pause Game</button>
         <button id="resume">Resume Game</button>
         <button id="saveLoad">Save + Load</button>
-        <button id="loadA1" onclick="qs('#editor').innerHTML = s.currentLevel.answers[1].toString()">Developer: LoadAnswerIndex1</button>
+          <button id="loadA1" onclick="qs('#editor').innerHTML = s.currentLevel.answers[1].toString()">Developer: LoadAnswerIndex1</button>
       </div>
       <div>
         <div id="editorContainer">
@@ -96,10 +96,12 @@
 
   <script src="bower_components/jquery/dist/jquery.min.js"></script>
   <script src="bower_components/observe-js/src/observe.js"></script>
+  <script src="bower_components/lodash/dist/lodash.min.js"></script>
   <script src="lib/bimap.js"></script>
   <script src="src/model.js"></script>
   <script src="src/view-model.js"></script>
   <script src="src/controller.js"></script>
+  <script src="src/tests.js"></script>
 </body>
 
 </html>
