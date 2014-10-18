@@ -17,11 +17,8 @@ mapColor.push("robot", 2);
 function Robot(x, y) {
   this.x = x;
   this.y = y;
-  this.userData = {};
+  this.state = {};
   this.lambda = null;
-}
-Robot.prototype.move = function(tiles) {
-  return this.lambda.call(this, this.x, this.y, tiles, this.userData);
 }
 
 function Map(x, y, robots, level) {
@@ -40,6 +37,9 @@ function Map(x, y, robots, level) {
   this.robots.forEach(function(r) {
     self.tiles[r.x][r.y] = mapColor.key("robot");
   })
+  this.getRobotData = function (robot) {
+    return [robot.x, robot.y, this.tiles, robot.state];
+  }
 }
 Map.prototype.makeErrorMessage = function(x, y, dir) {
   return "Robot at (" + x + "," + y + ") went out of bounds heading " + dir + ".";
@@ -52,7 +52,7 @@ Map.prototype.setAI = function(fn) {
 Map.prototype.step = function() {
   for (var i = 0; i < this.robots.length; i++) {
     var r = this.robots[i];
-    var dir = r.move(this.tiles);
+    var dir = r.lambda.apply(r, this.getRobotData.call(this, r));
     this.tiles[r.x][r.y] = mapColor.key("empty");
     switch (dir) {
       case Directions.LEFT:
@@ -117,6 +117,8 @@ function Level1() {
   ]
   for (var i = 0; i < this.map.tiles.length; i++)
     this.map.tiles[this.map.tiles.length - 1][i] = mapColor.key("target");
+
+
 }
 Level1.prototype = Object.create(Level.prototype);
 Level1.prototype.testVictory = function() {
@@ -133,7 +135,17 @@ function Level2() {
       // level 2, answer 1
       info.lastMove = (info.lastMove == Directions.DOWN) ? Directions.RIGHT : Directions.DOWN;
       return info.lastMove;
-    }
+    },
+     function (x, y, tiles, info) {
+        function Foo () {this.x = 0};
+        // level 2, answer 1
+        info.foo = info.foo || new Foo();
+        info.foo += 1;
+        // test console.log()
+        console.log(info.foo);
+        info.lastMove = (info.lastMove == Directions.DOWN) ? Directions.RIGHT : Directions.DOWN;
+        return info.lastMove;
+      } 
   ]
   this.map.tiles[this.map.tiles.length - 1][this.map.tiles.length - 1] = mapColor.key("target");
 }
@@ -156,8 +168,25 @@ function Level3() {
       return null;
     }
   ]
+  // set map.getRobotData
+  this.map.getRobotData = function(robot) {
+    // this = this.get
+    return [robot.x, robot.y, this.getNeighbors(robot.x, robot.y)
+          , this.getValidDirections(robot.x, robot.y), robot.state]
+  }
 }
 Level3.prototype = Object.create(Level.prototype);
+
+function Dud (xVal, yVal) {
+  Robot.call(this, xVal, yVal);
+  this.lambda = function(x, y, neighbors,validDirections, data) {
+    var n = Math.floor(Math.random() * (validDirections.length));
+    return validDirections[n];
+  }
+}
+
+Dud.prototype = Object.create(Robot.prototype);
+
 
 function Level4() {
   Level.call(this, 5);
