@@ -23,6 +23,14 @@ var Dirs = {
   DR: Directions.DOWNRIGHT,
   C:Directions.CENTER
 }
+
+function getDirName(dir) {
+  var res = undefined;
+  for (var d in Directions) {
+    if (Directions[d] == dir) return res = d;
+  }
+  return res;
+}
 var EndLevelState = {
   WIN: "win",
   LOSE: "lose"
@@ -73,44 +81,103 @@ Map.prototype.setAI = function(fn) {
     r.lambda = fn;
 }
 
+// Map.prototype.step = function() {
+//   for (var i = 0; i < this.robots.length; i++) {
+//     var r = this.robots[i];
+//     var dir = r.lambda.apply(null, this.getRobotData.call(this, r));
+//     this.tiles[r.x][r.y] = mapColor.key("empty");
+//     switch (dir) {
+//       case Directions.LEFT:
+//         if (r.x <= 0) {
+//           this.level.endMessage = this.makeErrorMessage(r.x, r.y, "left");
+//           this.level.endLevelState = EndLevelState.LOSE;
+//         } else
+//           r.x -= 1;
+//         break;
+//       case Directions.RIGHT:
+//         if (r.x + 1 > (this.width - 1)) {
+//           this.level.endMessage = this.makeErrorMessage(r.x, r.y, "right");
+//           this.level.endLevelState = EndLevelState.LOSE;
+//         } else
+//           r.x += 1;
+//         break;
+//       case Directions.UP:
+//         if (r.y - 1 < 0) {
+//           this.level.endLevelState = EndLevelState.LOSE;
+//           this.level.endMessage = this.makeErrorMessage(r.x, r.y, "up");
+//         } else
+//           r.y -= 1;
+//         break;
+//       case Directions.DOWN:
+//         if (r.y + 1 > (this.height - 1)) {
+//           this.level.endMessage = this.makeErrorMessage(r.x, r.y, "down");
+//           this.level.endLevelState = EndLevelState.LOSE;
+//         } else
+//           r.y += 1;
+//         break;
+//     }
+//     this.tiles[r.x][r.y] = mapColor.key("robot");
+//   }
+// }
+
 Map.prototype.step = function() {
   for (var i = 0; i < this.robots.length; i++) {
     var r = this.robots[i];
-    var dir = r.lambda.apply(r, this.getRobotData.call(this, r));
+    var dir = r.lambda.apply(null, this.getRobotData.call(this, r));
     this.tiles[r.x][r.y] = mapColor.key("empty");
-    switch (dir) {
-      case Directions.LEFT:
-        if (r.x <= 0) {
-          this.level.endMessage = this.makeErrorMessage(r.x, r.y, "left");
-          this.level.endLevelState = EndLevelState.LOSE;
-        } else
-          r.x -= 1;
-        break;
-      case Directions.RIGHT:
-        if (r.x + 1 > (this.width - 1)) {
-          this.level.endMessage = this.makeErrorMessage(r.x, r.y, "right");
-          this.level.endLevelState = EndLevelState.LOSE;
-        } else
-          r.x += 1;
-        break;
-      case Directions.UP:
-        if (r.y - 1 < 0) {
-          this.level.endLevelState = EndLevelState.LOSE;
-          this.level.endMessage = this.makeErrorMessage(r.x, r.y, "up");
-        } else
-          r.y -= 1;
-        break;
-      case Directions.DOWN:
-        if (r.y + 1 > (this.height - 1)) {
-          this.level.endMessage = this.makeErrorMessage(r.x, r.y, "down");
-          this.level.endLevelState = EndLevelState.LOSE;
-        } else
-          r.y += 1;
-        break;
+    // check if dir is a valid direction
+    var validDir = _.some(this.getValidDirections(r.x,r.y), function(el){
+      return dir == el;
+    })
+    if (validDir) {
+      this.transform(r, dir)
+      this.tiles[r.x][r.y] = mapColor.key("robot");
+    } else {
+      this.level.endMessage = this.makeErrorMessage(r.x, r.y, getDirName(dir));
+      this.level.endLevelState = EndLevelState.LOSE;
     }
-    this.tiles[r.x][r.y] = mapColor.key("robot");
   }
 }
+/**
+ * set a robot's location based on the direction
+ * higher order programming would come in handy here!
+ * @param  {Robot} robot     
+ * @param  {Direction} direction 
+ * @return {void}
+ */
+Map.prototype.transform = function(r, direction) {
+  switch (direction) {
+    case (Dirs.UL):
+      r.x-=1;
+      r.y-=1;
+      break;
+    case (Dirs.L):
+      r.x -=1;
+      break;
+    case (Dirs.DL):
+      r.x-=1;
+      r.y+=1;
+      break;
+    case Dirs.U:
+      r.y-=1;
+      break;
+    case Dirs.C:
+      break;
+    case Dirs.D:
+      r.y+=1;
+      break;
+    case Dirs.UR:
+      r.x+=1;
+      r.y-=1;
+      break;
+    case Dirs.R:
+      r.x+=1;
+      break;
+    case Dirs.DR:
+      r.x+=1;
+      r.y+=1;
+  }
+};
 
 Map.prototype.getNeighbors = function(x,y) {
    var minX = Math.max(0, x-1)
@@ -220,7 +287,7 @@ function Level3() {
   this.answers = [
     function(x, y, tiles, info) {
       // level 3, answer 1
-      return null;
+      return Dirs.C;
     }
   ]
   // set map.getRobotData
