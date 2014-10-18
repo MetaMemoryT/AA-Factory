@@ -51,7 +51,19 @@ function setLevel(levelI) {
   var levelcons = levels[levelI];
   var level = new levelcons();
   changeOrRestartLevel(level);
-  qs("#editor").innerHTML = level.answers[0].toString();
+
+  // qs("#editor").innerHTML = level.answers[0].toString();
+
+  s.editor.setValue(js_beautify(level.answers[0].toString(), {
+    'indent_size': 2
+  }));
+  /*
+  var that = this;
+  setTimeout(function() {
+    that.codeMirrorInstance.refresh();
+  },1);
+  */
+
   qs('#forward-button').disabled = false;
   qs('#back-button').disabled = false;
   qs('#chapterName').innerHTML = "L" + (levelI + 1) + ": " + level.name;
@@ -133,7 +145,18 @@ $("#resume").click(function(ev) {
   changeState(true);
 });
 
+
 window.addEventListener('polymer-ready', function(e) {
+  s.editor = CodeMirror.fromTextArea(document.getElementById("editor"), {
+    lineNumbers: true,
+    matchBrackets: true,
+    continueComments: "Enter",
+    viewportMargin: Infinity,
+    extraKeys: {
+      "Ctrl-Q": "toggleComment"
+    }
+  });
+
   if (localStorage.levelI) {
     setLevel(JSON.parse(localStorage.levelI));
   } else {
@@ -146,4 +169,10 @@ window.addEventListener('polymer-ready', function(e) {
     localStorage.lDescVis = JSON.stringify(true);
     setLDescVis(true);
   }
+
+  // http://stackoverflow.com/questions/8349571/codemirror-editor-is-not-loading-content-until-clicked
+  var p = document.querySelector('core-animated-pages');
+  p.addEventListener('core-animated-pages-transition-end', function(e) {
+    s.editor.refresh();
+  });
 });
