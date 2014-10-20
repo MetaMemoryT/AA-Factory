@@ -45,6 +45,10 @@ function Robot(x, y) {
   this.y = y;
   this.state = {};
   this.lambda = null;
+  // these attributes allow for robots of variable speed
+  this.speed = 1;
+  // how many turns ago the robot last moved
+  this.lastMove = 1;
 }
 
 function Map(x, y, robots, level) {
@@ -99,22 +103,31 @@ Map.prototype.setAI = function(fn) {
 Map.prototype.step = function() {
   for (var i = 0; i < this.robots.length; i++) {
     var r = this.robots[i];
-    var dir = r.lambda.apply(null, this.getRobotData.call(this, r));
-    this.tiles[r.x][r.y] = mapColor.key("empty");
-    // check if dir is a valid direction
-    var validDir = _.some(this.getValidDirections(r.x,r.y), function(el){
-      return dir == el;
-    })
-    if (validDir) {
-      this.transform(r, dir)
-      for (var fn of this.stepLogicCbs) {
-        fn.call(this, r, dir);
+    if (r.lastMove >= (1/r.speed)) {
+      // continue
+      var dir = r.lambda.apply(null, this.getRobotData.call(this, r));
+      this.tiles[r.x][r.y] = mapColor.key("empty");
+      // check if dir is a valid direction
+      var validDir = _.some(this.getValidDirections(r.x,r.y), function(el){
+        return dir == el;
+      })
+      if (validDir) {
+        this.transform(r, dir)
+        for (var fn of this.stepLogicCbs) {
+          fn.call(this, r, dir);
+        }
+        this.tiles[r.x][r.y] = this.colorRobot.call(this, r);
+      } else {
+        this.level.endMessage = this.makeErrorMessage(r.x, r.y, getDirName(dir));
+        this.level.endLevelState = EndLevelState.LOSE;
       }
-      this.tiles[r.x][r.y] = this.colorRobot.call(this, r);
+
+      r.lastMove = 1;
     } else {
-      this.level.endMessage = this.makeErrorMessage(r.x, r.y, getDirName(dir));
-      this.level.endLevelState = EndLevelState.LOSE;
+      // if the robot didn't move increment lastMove
+      r.lastMove++;
     }
+    
   }
 }
 /**
@@ -296,14 +309,9 @@ function Level3() {
   // add functionality to remove a dud if the robot moves on it
   this.map.stepLogicCbs.push(function(r, dir){
     // this is set to the map
-    if (this.tiles[r.x][r.y] == 2) {
+    if (r instanceof Dud) {
       var dudToDestroy = [];
-      for (var d of this.robots.slice(1, this.robots.length)){
-        if (d.x == r.x && d.y == r.y) {
-          // if a dud is at the same location of the robot, kill it
-          dudToDestroy.push(d);
-        }
-      }
+      if (r.x == this.robots[0].x && r.y == this.robots[0].y) dudToDestroy.push(r);
       this.robots = _.difference(this.robots, dudToDestroy);
     }
   })
@@ -315,6 +323,7 @@ Level3.prototype.testVictory = function() {
 
 function Dud (xVal, yVal) {
   Robot.call(this, xVal, yVal);
+  this.speed = 1;
   this.lambda = function(x, y, neighbors,validDirections, data) {
     var n = Math.floor(Math.random() * (validDirections.length));
     return validDirections[n];
