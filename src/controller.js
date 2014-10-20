@@ -7,7 +7,8 @@ var qsA = document.querySelectorAll.bind(document);
 
 function saveAndLoad() {
   // eval user code into a function
-  var strCode = qs("#editor").innerHTML;
+  // need to use JQuery.val() to get the current text out of a text area
+  var strCode = $("#editor").val();
   $.globalEval("var newCode = " + strCode);
   s.currentLevel.map.setAI(newCode);
 }
