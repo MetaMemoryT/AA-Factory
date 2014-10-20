@@ -81,45 +81,6 @@ Map.prototype.setAI = function(fn) {
     r.lambda = fn;
 }
 
-// Map.prototype.step = function() {
-//   for (var i = 0; i < this.robots.length; i++) {
-//     var r = this.robots[i];
-//     var dir = r.lambda.apply(null, this.getRobotData.call(this, r));
-//     this.tiles[r.x][r.y] = mapColor.key("empty");
-//     switch (dir) {
-//       case Directions.LEFT:
-//         if (r.x <= 0) {
-//           this.level.endMessage = this.makeErrorMessage(r.x, r.y, "left");
-//           this.level.endLevelState = EndLevelState.LOSE;
-//         } else
-//           r.x -= 1;
-//         break;
-//       case Directions.RIGHT:
-//         if (r.x + 1 > (this.width - 1)) {
-//           this.level.endMessage = this.makeErrorMessage(r.x, r.y, "right");
-//           this.level.endLevelState = EndLevelState.LOSE;
-//         } else
-//           r.x += 1;
-//         break;
-//       case Directions.UP:
-//         if (r.y - 1 < 0) {
-//           this.level.endLevelState = EndLevelState.LOSE;
-//           this.level.endMessage = this.makeErrorMessage(r.x, r.y, "up");
-//         } else
-//           r.y -= 1;
-//         break;
-//       case Directions.DOWN:
-//         if (r.y + 1 > (this.height - 1)) {
-//           this.level.endMessage = this.makeErrorMessage(r.x, r.y, "down");
-//           this.level.endLevelState = EndLevelState.LOSE;
-//         } else
-//           r.y += 1;
-//         break;
-//     }
-//     this.tiles[r.x][r.y] = mapColor.key("robot");
-//   }
-// }
-
 Map.prototype.step = function() {
   for (var i = 0; i < this.robots.length; i++) {
     var r = this.robots[i];
@@ -224,7 +185,7 @@ function Level1() {
   this.answers = [
     function(x, y, tiles, info) {
       // level 1, answer 1
-      return Directions.RIGHT;
+      return Dirs.R;
     },
     function(x, y, tiles, info) {
       // level 1, answer 2

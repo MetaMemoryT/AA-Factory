@@ -41,6 +41,18 @@ var levels = [
   Level4
 ]
 
+function setLevelInsert(levelI) {
+  setLevelInitial(levelI);
+  insertAnswerIndex(0);
+  setLevel(levelI);
+}
+
+function setLevelInitial(levelI) {
+  var levelcons = levels[levelI];
+  var level = new levelcons();
+  s.currentLevel = level;
+}
+
 function setLevel(levelI) {
   localStorage.levelI = JSON.stringify(levelI);
 
@@ -48,15 +60,11 @@ function setLevel(levelI) {
   ide.remove();
   qs('core-animated-pages').selectIndex(levelI).appendChild(ide);
 
-  var levelcons = levels[levelI];
-  var level = new levelcons();
-  changeOrRestartLevel(level);
-
-  insertAnswerIndex(0);
+  changeOrRestartLevel(s.currentLevel);
 
   qs('#forward-button').disabled = false;
   qs('#back-button').disabled = false;
-  qs('#chapterName').innerHTML = "L" + (levelI + 1) + ": " + level.name;
+  qs('#chapterName').innerHTML = "L" + (levelI + 1) + ": " + s.currentLevel.name;
   if (levelI == (levels.length - 1)) qs('#forward-button').disabled = true;
   if (levelI == 0) qs('#back-button').disabled = true;
 }
@@ -71,7 +79,7 @@ function changeLevel(num) {
   var i = qs('core-animated-pages').selectedIndex;
   var levelI = i + num; // zero-indexed level value
 
-  setLevel(levelI);
+  setLevelInsert(levelI);
 }
 
 s.table = null;
@@ -80,7 +88,6 @@ s.endLevelO = null;
 s.currentLevel = null;
 
 function changeOrRestartLevel(level) {
-  s.currentLevel = level;
   if (s.endlevelO) s.endlevelO.close();
   if (s.table) s.table.tbody.children().remove();
 
@@ -128,7 +135,9 @@ $("#step").click(function(ev) {
   stepRender();
 });
 $("#run").click(function(ev) {
-  changeOrRestartLevel(s.currentLevel);
+  var levelI = JSON.parse(localStorage.levelI);
+  setLevelInitial(levelI);
+  setLevel(levelI);
   changeState(true);
 });
 $("#saveLoad").click(function(ev) {
@@ -154,9 +163,9 @@ window.addEventListener('polymer-ready', function(e) {
   });
 
   if (localStorage.levelI) {
-    setLevel(JSON.parse(localStorage.levelI));
+    setLevelInsert(JSON.parse(localStorage.levelI));
   } else {
-    setLevel(0);
+    setLevelInsert(0);
   }
 
   if (localStorage.lDescVis) {

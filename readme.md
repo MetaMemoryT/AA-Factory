@@ -21,6 +21,7 @@ bower install
 - 3 levels working
 - codemirror
 - console.log
+- fix changeOrRestartLevel
 decision making
 inter-agent communication
 seek and destroy
