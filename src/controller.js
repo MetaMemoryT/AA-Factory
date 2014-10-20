@@ -7,8 +7,7 @@ var qsA = document.querySelectorAll.bind(document);
 
 function saveAndLoad() {
   // eval user code into a function
-  // need to use JQuery.val() to get the current text out of a text area
-  var strCode = $("#editor").val();
+  var strCode = s.editor.getValue();
   $.globalEval("var newCode = " + strCode);
   s.currentLevel.map.setAI(newCode);
 }
@@ -53,23 +52,19 @@ function setLevel(levelI) {
   var level = new levelcons();
   changeOrRestartLevel(level);
 
-  // qs("#editor").innerHTML = level.answers[0].toString();
-
-  s.editor.setValue(js_beautify(level.answers[0].toString(), {
-    'indent_size': 2
-  }));
-  /*
-  var that = this;
-  setTimeout(function() {
-    that.codeMirrorInstance.refresh();
-  },1);
-  */
+  insertAnswerIndex(0);
 
   qs('#forward-button').disabled = false;
   qs('#back-button').disabled = false;
   qs('#chapterName').innerHTML = "L" + (levelI + 1) + ": " + level.name;
   if (levelI == (levels.length - 1)) qs('#forward-button').disabled = true;
   if (levelI == 0) qs('#back-button').disabled = true;
+}
+
+function insertAnswerIndex(i) {
+  s.editor.setValue(js_beautify(s.currentLevel.answers[i].toString(), {
+    'indent_size': 2
+  }));
 }
 
 function changeLevel(num) {

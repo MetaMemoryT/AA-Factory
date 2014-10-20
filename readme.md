@@ -20,7 +20,7 @@ bower install
 - email
 - 3 levels working
 - codemirror
-console.log
+- console.log
 decision making
 inter-agent communication
 seek and destroy
