@@ -1,3 +1,7 @@
+## Features needed for Presentation:
+### BUG Sometimes The Robot Disappears in level3
+If you use the step feature in level 3 you will notice that the robot disappears for a turn or 2.
+This could be to do with the step logic callback added in the constructor of level3 or just a rendering problem. Note, the map for level3 is an extended class called L3Map which changes the default coloring behavior for a robot.
 ## creation of user AI
 Not using server approach because it is too technical for our specific audience.
 ### inline editor
@@ -19,9 +23,6 @@ bower install
 - bring back alert win / lose: out of bounds
 - email
 - 3 levels working
-- codemirror
-- console.log
-- fix changeOrRestartLevel
 decision making
 inter-agent communication
 seek and destroy
@@ -39,3 +40,35 @@ astar
 dynamic programming
 Inspect Game State
 Dropbox sync + share
+
+
+## theory
+The AI that the user implements should be structure as a function which takes 2 object arguments like this:
+```
+function move(sensors, actuators, state) {
+    ...
+}
+```
+`sensors` is an object of fields and methods the AI can use to perceive the environment.
+`actuators` is an object of fields and methods the AI can use act upon the environment.
+`state` is an object which contains anything the AI keeps track of. Could be considered its "knowledge".
+http://51lica.com/wp-content/uploads/2012/05/Artificial-Intelligence-A-Modern-Approach-3rd-Edition.pdf, chapter 2
+
+## level4
+level 4 is going to be a taxi driver Robot.
+
+Each Taxi Driver (robot) 
+    * has a list of clients (an array, managed by the level, containing the coordinates of the clients)
+    * must move each client to their destination ()
+    * should complete goals as fast as possible
+The level is beat if the taxi driver signals that it is finished in less than the time limit
+The time limit is calculated as follows:
+```
+timeLimit = 2 * sum(distance from client's location to their goal) + (grid size) / (number of clients)
+```
+This formula assumes the clients are evenly distributed.
+This should be fairly easy to beat because it is allowing for the taxi driver to deliver a client, retrace his path, then pick up the next client.  The level could be made more challenging by adding a difficulty modifier like so:
+```
+timeLimit' = timeLimit * difficulty
+where difficulty < 1
+```
