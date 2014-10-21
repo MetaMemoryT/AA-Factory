@@ -216,7 +216,7 @@ function Level1() {
   this.answers = [
     function(x, y, tiles, info) {
       // level 1, answer 1
-      return Directions.RIGHT;
+      return Dirs.R;
     },
     function(x, y, tiles, info) {
       // level 1, answer 2

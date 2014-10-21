@@ -7,8 +7,7 @@ var qsA = document.querySelectorAll.bind(document);
 
 function saveAndLoad() {
   // eval user code into a function
-  // need to use JQuery.val() to get the current text out of a text area
-  var strCode = $("#editor").val();
+  var strCode = s.editor.getValue();
   $.globalEval("var newCode = " + strCode);
   s.currentLevel.map.setAI(newCode);
 }
@@ -42,6 +41,18 @@ var levels = [
   Level4
 ]
 
+function setLevelInsert(levelI) {
+  setLevelInitial(levelI);
+  insertAnswerIndex(0);
+  setLevel(levelI);
+}
+
+function setLevelInitial(levelI) {
+  var levelcons = levels[levelI];
+  var level = new levelcons();
+  s.currentLevel = level;
+}
+
 function setLevel(levelI) {
   localStorage.levelI = JSON.stringify(levelI);
 
@@ -49,22 +60,26 @@ function setLevel(levelI) {
   ide.remove();
   qs('core-animated-pages').selectIndex(levelI).appendChild(ide);
 
-  var levelcons = levels[levelI];
-  var level = new levelcons();
-  changeOrRestartLevel(level);
-  qs("#editor").innerHTML = level.answers[0].toString();
+  changeOrRestartLevel(s.currentLevel);
+
   qs('#forward-button').disabled = false;
   qs('#back-button').disabled = false;
-  qs('#chapterName').innerHTML = "L" + (levelI + 1) + ": " + level.name;
+  qs('#chapterName').innerHTML = "L" + (levelI + 1) + ": " + s.currentLevel.name;
   if (levelI == (levels.length - 1)) qs('#forward-button').disabled = true;
   if (levelI == 0) qs('#back-button').disabled = true;
+}
+
+function insertAnswerIndex(i) {
+  s.editor.setValue(js_beautify(s.currentLevel.answers[i].toString(), {
+    'indent_size': 2
+  }));
 }
 
 function changeLevel(num) {
   var i = qs('core-animated-pages').selectedIndex;
   var levelI = i + num; // zero-indexed level value
 
-  setLevel(levelI);
+  setLevelInsert(levelI);
 }
 
 s.table = null;
@@ -73,7 +88,6 @@ s.endLevelO = null;
 s.currentLevel = null;
 
 function changeOrRestartLevel(level) {
-  s.currentLevel = level;
   if (s.endlevelO) s.endlevelO.close();
   if (s.table) s.table.tbody.children().remove();
 
@@ -122,7 +136,9 @@ $("#step").click(function(ev) {
   stepRender();
 });
 $("#run").click(function(ev) {
-  changeOrRestartLevel(s.currentLevel);
+  var levelI = JSON.parse(localStorage.levelI);
+  setLevelInitial(levelI);
+  setLevel(levelI);
   changeState(true);
 });
 $("#saveLoad").click(function(ev) {
@@ -135,11 +151,22 @@ $("#resume").click(function(ev) {
   changeState(true);
 });
 
+
 window.addEventListener('polymer-ready', function(e) {
+  s.editor = CodeMirror.fromTextArea(document.getElementById("editor"), {
+    lineNumbers: true,
+    matchBrackets: true,
+    continueComments: "Enter",
+    viewportMargin: Infinity,
+    extraKeys: {
+      "Ctrl-Q": "toggleComment"
+    }
+  });
+
   if (localStorage.levelI) {
-    setLevel(JSON.parse(localStorage.levelI));
+    setLevelInsert(JSON.parse(localStorage.levelI));
   } else {
-    setLevel(0);
+    setLevelInsert(0);
   }
 
   if (localStorage.lDescVis) {
@@ -148,4 +175,10 @@ window.addEventListener('polymer-ready', function(e) {
     localStorage.lDescVis = JSON.stringify(true);
     setLDescVis(true);
   }
+
+  // http://stackoverflow.com/questions/8349571/codemirror-editor-is-not-loading-content-until-clicked
+  var p = document.querySelector('core-animated-pages');
+  p.addEventListener('core-animated-pages-transition-end', function(e) {
+    s.editor.refresh();
+  });
 });

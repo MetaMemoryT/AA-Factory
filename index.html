@@ -13,6 +13,8 @@
   <link rel="import" href="bower_components/paper-icon-button/paper-icon-button.html">
   <link rel="import" href="bower_components/core-animated-pages/core-animated-pages.html">
   <link rel="import" href="bower_components/core-animated-pages/transitions/slide-from-right.html">
+
+  <link rel="stylesheet" href="bower_components/codemirror/lib/codemirror.css">
   <link rel="stylesheet" href="css/style.css">
 </head>
 
@@ -75,12 +77,12 @@
         <button id="pause">Pause Game</button>
         <button id="resume">Resume Game</button>
         <button id="saveLoad">Save + Load</button>
-          <button id="loadA1" onclick="qs('#editor').innerHTML = s.currentLevel.answers[1].toString()">Developer: LoadAnswerIndex1</button>
+        <button id="loadA1" onclick="insertAnswerIndex(1)">Developer: LoadAnswerIndex1</button>
       </div>
       <div>
         <div id="editorContainer">
-          <textarea rows="8" cols="100" id="editor" style="height: 126px;">
-          function() {return null;}
+          <textarea rows="8" cols="100" id="editor" name="code" style="height: 126px;">
+            function() {return null;}
           </textarea>
         </div>
         <div id="gridContainer">
@@ -96,8 +98,16 @@
 
   <script src="bower_components/jquery/dist/jquery.min.js"></script>
   <script src="bower_components/observe-js/src/observe.js"></script>
+  <script src="bower_components/codemirror/lib/codemirror.js"></script>
+  <script src="bower_components/codemirror/addon/edit/matchbrackets.js"></script>
+  <script src="bower_components/codemirror/addon/comment/continuecomment.js"></script>
+  <script src="bower_components/codemirror/addon/comment/comment.js"></script>
+  <script src="bower_components/codemirror/mode/javascript/javascript.js"></script>
+  <script src="bower_components/js-beautify/js/lib/beautify.js"></script>
   <script src="bower_components/lodash/dist/lodash.min.js"></script>
-  <script src="lib/bimap.js"></script>
+
+  <script src="node_modules/bimap/lib/bimap.js"></script>
+
   <script src="src/model.js"></script>
   <script src="src/view-model.js"></script>
   <script src="src/controller.js"></script>

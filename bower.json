@@ -29,6 +29,9 @@
     "core-animated-pages": "Polymer/core-animated-pages#~0.4.2",
     "paper-icon-button": "Polymer/paper-icon-button#~0.4.2",
     "core-icons": "Polymer/core-icons#~0.4.2",
+    "codemirror": "~4.6.0",
+    "js-beautify": "~1.5.4",
     "lodash":"2.4.1"
+
   }
 }
