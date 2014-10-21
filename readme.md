@@ -12,6 +12,9 @@ Make a node server which serves up a specific level.  This level will have a ske
 requires chrome > M38 for for..of loops
 bower install
 
+### Bugs (- when solved)
+"Run Game" on level 3, "Run Game" again and it fails, likely some of the new global vars are not being reset.
+
 ### roadmap
 - Pause Resume with correct disabled/enabled
 - Submit Code -> Save + Load
