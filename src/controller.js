@@ -89,7 +89,8 @@ function changeOrRestartLevel(level) {
     $("#resume").prop("disabled", true);
     var levelI = JSON.parse(localStorage.levelI);
     if (s.currentLevel.endLevelState == EndLevelState.WIN) {
-      alert("You beat level " + (levelI + 1));
+      var turns = (levelI.turns) ? " in " + levelI.turns + "." : "";
+      alert("You beat level " + (levelI + 1) + turns);
     }
     if (s.currentLevel.endLevelState == EndLevelState.LOSE) {
       alert("You lost level " + (levelI + 1) + ". Error message: " + s.currentLevel.endMessage);

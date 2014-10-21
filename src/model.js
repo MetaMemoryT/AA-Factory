@@ -276,29 +276,52 @@ L3Map.prototype.colorRobot = function(robot) {
   if(robot instanceof Dud) return mapColor.key("target");
   else return mapColor.key("robot");
 }
+var robotFinished = false;
 /**
  * seek and destroy
  */
 function Level3() {
   var duds = [];
   // add duds
-  for (var i = 0; i < 2; i++){
+  for (var i = 0; i < 10; i++){
     duds.push(new Dud(Math.floor(Math.random()*6), Math.floor(Math.random()*6)));
   }
   var map = new L3Map(7,7, [new Robot(0,0)].concat(duds) , this);
   Level.call(this, 5, map);
   this.name = "Seek and Destroy";
   this.answers = [
-    function(x, y, tiles, info) {
-      // level 3, answer 1
-      return Dirs.C;
-    }
+     function(x, y, neighbors,validDirections, data, finished) {
+      var n = Math.floor(Math.random() * (validDirections.length));
+      data.deltaSum = data.deltaSum || 0;
+      data.deltaCount = data.deltaCount || 0;
+      data.lastSeen = data.lastSeen || 0;
+      var duds = neighbors.filter(function(t) {
+        return t == 1;
+      })
+
+      if (duds.length >= 1) {
+        data.deltaSum += data.lastSeen;
+        data.deltaCount += 1;
+        data.lastSeen = 0;
+      }
+      if (Math.abs((data.deltaSum/data.deltaCount) - data.lastSeen) > 20) {
+        finished();
+      }
+      data.lastSeen++;
+      console.log(data);
+      return validDirections[n];
+    } 
   ]
+
+  // a function for the robot to call when they are done.
+  function finished() {
+    window.robotFinished = true;
+  }
   // set map.getRobotData
   this.map.getRobotData = function(robot) {
     // this = this.get
     return [robot.x, robot.y, this.getNeighbors(robot.x, robot.y)
-          , this.getValidDirections(robot.x, robot.y), robot.state]
+          , this.getValidDirections(robot.x, robot.y), robot.state, finished]
   }
 
   // change the default setAI behavior
@@ -318,7 +341,13 @@ function Level3() {
 }
 Level3.prototype = Object.create(Level.prototype);
 Level3.prototype.testVictory = function() {
-  return (this.map.robots.length == 1);
+  if (robotFinished) {
+    if (this.map.robots.length == 1) return true;
+    else {
+      this.endMessage = "There were still " + (this.map.robots.length - 1) + " other robots left to find"
+      this.endLevelState = EndLevelState.LOSE;
+    }
+  }
 }
 
 function Dud (xVal, yVal) {
