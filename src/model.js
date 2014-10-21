@@ -1,27 +1,27 @@
 // model should know nothing of the view or rendering, (no DOM interaction)
 var Directions = {
-  UPLEFT:0,
-  LEFT:1,
-  DOWNLEFT:2,
+  UPLEFT: 0,
+  LEFT: 1,
+  DOWNLEFT: 2,
   UP: 3,
   CENTER: 4,
-  DOWN:5,
+  DOWN: 5,
   UPRIGHT: 6,
   RIGHT: 7,
-  DOWNRIGHT:8,
-  
+  DOWNRIGHT: 8,
+
 }
 var Dirs = {
   // shorthands
-  UL:Directions.UPLEFT,
-  U:Directions.UP,
-  UR:Directions.UPRIGHT,
+  UL: Directions.UPLEFT,
+  U: Directions.UP,
+  UR: Directions.UPRIGHT,
   L: Directions.LEFT,
   R: Directions.RIGHT,
   DL: Directions.DOWNLEFT,
   D: Directions.DOWN,
   DR: Directions.DOWNRIGHT,
-  C:Directions.CENTER
+  C: Directions.CENTER
 }
 
 function getDirName(dir) {
@@ -69,27 +69,27 @@ function Map(x, y, robots, level) {
 
   var self = this;
   this.robots.forEach(function(r) {
-    self.tiles[r.x][r.y] = self.colorRobot(r);
-  })
-  /**
-   * the default function for giving data to a robot
-   * note: the `this` keyword is set to the map inside this function when it is called
-   * @param  {Robot} robot a the specific robot to get data for
-   * @return {Array}       an array of args to pass to Robot.lambda
-   */
-  this.getRobotData = function (robot) {
+      self.tiles[r.x][r.y] = self.colorRobot(r);
+    })
+    /**
+     * the default function for giving data to a robot
+     * note: the `this` keyword is set to the map inside this function when it is called
+     * @param  {Robot} robot a the specific robot to get data for
+     * @return {Array}       an array of args to pass to Robot.lambda
+     */
+  this.getRobotData = function(robot) {
     return [robot.x, robot.y, this.tiles, robot.state];
   }
 
-  
+
 }
 
 /**
  * Default method for giving a color to a tile
- * @param  {Robot} robot 
+ * @param  {Robot} robot
  * @return {number}       Color to be returned
  */
-Map.prototype.colorRobot = function (robot) {
+Map.prototype.colorRobot = function(robot) {
   return mapColor.key("robot")
 }
 Map.prototype.makeErrorMessage = function(x, y, dir) {
@@ -103,12 +103,12 @@ Map.prototype.setAI = function(fn) {
 Map.prototype.step = function() {
   for (var i = 0; i < this.robots.length; i++) {
     var r = this.robots[i];
-    if (r.lastMove >= (1/r.speed)) {
+    if (r.lastMove >= (1 / r.speed)) {
       // continue
       var dir = r.lambda.apply(null, this.getRobotData.call(this, r));
       this.tiles[r.x][r.y] = mapColor.key("empty");
       // check if dir is a valid direction
-      var validDir = _.some(this.getValidDirections(r.x,r.y), function(el){
+      var validDir = _.some(this.getValidDirections(r.x, r.y), function(el) {
         return dir == el;
       })
       if (validDir) {
@@ -127,58 +127,59 @@ Map.prototype.step = function() {
       // if the robot didn't move increment lastMove
       r.lastMove++;
     }
-    
+
   }
 }
+
 /**
  * set a robot's location based on the direction
  * higher order programming would come in handy here!
- * @param  {Robot} robot     
- * @param  {Direction} direction 
+ * @param  {Robot} robot
+ * @param  {Direction} direction
  * @return {void}
  */
 Map.prototype.transform = function(r, direction) {
   switch (direction) {
     case (Dirs.UL):
-      r.x-=1;
-      r.y-=1;
+      r.x -= 1;
+      r.y -= 1;
       break;
     case (Dirs.L):
-      r.x -=1;
+      r.x -= 1;
       break;
     case (Dirs.DL):
-      r.x-=1;
-      r.y+=1;
+      r.x -= 1;
+      r.y += 1;
       break;
     case Dirs.U:
-      r.y-=1;
+      r.y -= 1;
       break;
     case Dirs.C:
       break;
     case Dirs.D:
-      r.y+=1;
+      r.y += 1;
       break;
     case Dirs.UR:
-      r.x+=1;
-      r.y-=1;
+      r.x += 1;
+      r.y -= 1;
       break;
     case Dirs.R:
-      r.x+=1;
+      r.x += 1;
       break;
     case Dirs.DR:
-      r.x+=1;
-      r.y+=1;
+      r.x += 1;
+      r.y += 1;
   }
-};
+}
 
-Map.prototype.getNeighbors = function(x,y) {
-   var minX = Math.max(0, x-1)
-       , maxX = Math.min(this.width - 1, x+1)
-       , minY = Math.max(0, y-1)
-       , maxY = Math.min(this.height - 1, y+1);
+Map.prototype.getNeighbors = function(x, y) {
+  var minX = Math.max(0, x - 1),
+    maxX = Math.min(this.width - 1, x + 1),
+    minY = Math.max(0, y - 1),
+    maxY = Math.min(this.height - 1, y + 1);
   var neis = [];
-  for (var i = x-1; i <= x+1; i++) {
-    for (var j = y-1; j <= y+1; j++) {
+  for (var i = x - 1; i <= x + 1; i++) {
+    for (var j = y - 1; j <= y + 1; j++) {
       // need to push null if the tiles is out of bounds
       if (i < minX || i > maxX || j < minY || j > maxY) neis.push(null);
       else neis.push(this.tiles[i][j]);
@@ -187,15 +188,15 @@ Map.prototype.getNeighbors = function(x,y) {
   return neis;
 }
 
-Map.prototype.getValidDirections = function(x,y) {
+Map.prototype.getValidDirections = function(x, y) {
   var dirs = [];
-  var neis = this.getNeighbors(x,y);
-  for (var dir in Directions){
+  var neis = this.getNeighbors(x, y);
+  for (var dir in Directions) {
     // 0 evaluates to false!!!
     if (neis[Directions[dir]] != null) dirs.push(Directions[dir]);
   }
   return dirs;
-};
+}
 
 // things all levels have
 function Level(size, map) {
@@ -245,16 +246,18 @@ function Level2() {
       info.lastMove = (info.lastMove == Directions.DOWN) ? Directions.RIGHT : Directions.DOWN;
       return info.lastMove;
     },
-     function (x, y, tiles, info) {
-        function Foo () {this.x = 0};
-        // level 2, answer 1
-        info.foo = info.foo || new Foo();
-        info.foo += 1;
-        // test console.log()
-        console.log(info.foo);
-        info.lastMove = (info.lastMove == Directions.DOWN) ? Directions.RIGHT : Directions.DOWN;
-        return info.lastMove;
-      } 
+    function(x, y, tiles, info) {
+      function Foo() {
+        this.x = 0
+      };
+      // level 2, answer 1
+      info.foo = info.foo || new Foo();
+      info.foo += 1;
+      // test console.log()
+      console.log(info.foo);
+      info.lastMove = (info.lastMove == Directions.DOWN) ? Directions.RIGHT : Directions.DOWN;
+      return info.lastMove;
+    }
   ]
   this.map.tiles[this.map.tiles.length - 1][this.map.tiles.length - 1] = mapColor.key("target");
 }
@@ -268,46 +271,70 @@ Level2.prototype.testVictory = function() {
 /**
  * Special Map for level 3
  */
-function L3Map (w, h, robots, level) {
+function L3Map(w, h, robots, level) {
   Map.call(this, w, h, robots, level)
 }
 L3Map.prototype = Object.create(Map.prototype);
 L3Map.prototype.colorRobot = function(robot) {
-  if(robot instanceof Dud) return mapColor.key("target");
+  if (robot instanceof Dud) return mapColor.key("target");
   else return mapColor.key("robot");
 }
+
+var robotFinished = false;
+
 /**
  * seek and destroy
  */
 function Level3() {
   var duds = [];
   // add duds
-  for (var i = 0; i < 2; i++){
-    duds.push(new Dud(Math.floor(Math.random()*6), Math.floor(Math.random()*6)));
+  for (var i = 0; i < 10; i++) {
+    duds.push(new Dud(Math.floor(Math.random() * 6), Math.floor(Math.random() * 6)));
   }
-  var map = new L3Map(7,7, [new Robot(0,0)].concat(duds) , this);
+  var map = new L3Map(7, 7, [new Robot(0, 0)].concat(duds), this);
   Level.call(this, 5, map);
   this.name = "Seek and Destroy";
   this.answers = [
-    function(x, y, tiles, info) {
-      // level 3, answer 1
-      return Dirs.C;
+    function(x, y, neighbors, validDirections, data, finished) {
+      var n = Math.floor(Math.random() * (validDirections.length));
+      data.deltaSum = data.deltaSum || 0;
+      data.deltaCount = data.deltaCount || 0;
+      data.lastSeen = data.lastSeen || 0;
+      var duds = neighbors.filter(function(t) {
+        return t == 1;
+      })
+
+      if (duds.length >= 1) {
+        data.deltaSum += data.lastSeen;
+        data.deltaCount += 1;
+        data.lastSeen = 0;
+      }
+      if (Math.abs((data.deltaSum / data.deltaCount) - data.lastSeen) > 20) {
+        finished();
+      }
+      data.lastSeen++;
+      console.log(data);
+      return validDirections[n];
     }
   ]
-  // set map.getRobotData
+
+  // a function for the robot to call when they are done.
+  function finished() {
+      window.robotFinished = true;
+    }
+    // set map.getRobotData
   this.map.getRobotData = function(robot) {
     // this = this.get
-    return [robot.x, robot.y, this.getNeighbors(robot.x, robot.y)
-          , this.getValidDirections(robot.x, robot.y), robot.state]
+    return [robot.x, robot.y, this.getNeighbors(robot.x, robot.y), this.getValidDirections(robot.x, robot.y), robot.state, finished]
   }
 
   // change the default setAI behavior
-  this.map.setAI = function (fn) {
+  this.map.setAI = function(fn) {
     this.robots[0].lambda = fn;
   }
 
   // add functionality to remove a dud if the robot moves on it
-  this.map.stepLogicCbs.push(function(r, dir){
+  this.map.stepLogicCbs.push(function(r, dir) {
     // this is set to the map
     if (r instanceof Dud) {
       var dudToDestroy = [];
@@ -318,13 +345,19 @@ function Level3() {
 }
 Level3.prototype = Object.create(Level.prototype);
 Level3.prototype.testVictory = function() {
-  return (this.map.robots.length == 1);
+  if (robotFinished) {
+    if (this.map.robots.length == 1) return true;
+    else {
+      this.endMessage = "There were still " + (this.map.robots.length - 1) + " other robots left to find"
+      this.endLevelState = EndLevelState.LOSE;
+    }
+  }
 }
 
-function Dud (xVal, yVal) {
+function Dud(xVal, yVal) {
   Robot.call(this, xVal, yVal);
   this.speed = 1;
-  this.lambda = function(x, y, neighbors,validDirections, data) {
+  this.lambda = function(x, y, neighbors, validDirections, data) {
     var n = Math.floor(Math.random() * (validDirections.length));
     return validDirections[n];
   }
