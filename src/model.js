@@ -45,6 +45,10 @@ function Robot(x, y) {
   this.y = y;
   this.state = {};
   this.lambda = null;
+  // these attributes allow for robots of variable speed
+  this.speed = 1;
+  // how many turns ago the robot last moved
+  this.lastMove = 1;
 }
 
 function Map(x, y, robots, level) {
@@ -53,15 +57,19 @@ function Map(x, y, robots, level) {
   this.width = x;
   this.height = y;
   this.tiles = [];
+  // additional logic callbacks executed in Map.step
+  this.stepLogicCbs = [];
   for (var i = 0; i < this.width; i++) {
     this.tiles[i] = new Array(this.height);
     for (var j = 0; j < this.tiles[i].length; j++) {
       this.tiles[i][j] = mapColor.key("empty");
     }
   }
+
+
   var self = this;
   this.robots.forEach(function(r) {
-    self.tiles[r.x][r.y] = mapColor.key("robot");
+    self.tiles[r.x][r.y] = self.colorRobot(r);
   })
   /**
    * the default function for giving data to a robot
@@ -72,6 +80,17 @@ function Map(x, y, robots, level) {
   this.getRobotData = function (robot) {
     return [robot.x, robot.y, this.tiles, robot.state];
   }
+
+  
+}
+
+/**
+ * Default method for giving a color to a tile
+ * @param  {Robot} robot 
+ * @return {number}       Color to be returned
+ */
+Map.prototype.colorRobot = function (robot) {
+  return mapColor.key("robot")
 }
 Map.prototype.makeErrorMessage = function(x, y, dir) {
   return "Robot at (" + x + "," + y + ") went out of bounds heading " + dir + ".";
@@ -84,19 +103,31 @@ Map.prototype.setAI = function(fn) {
 Map.prototype.step = function() {
   for (var i = 0; i < this.robots.length; i++) {
     var r = this.robots[i];
-    var dir = r.lambda.apply(null, this.getRobotData.call(this, r));
-    this.tiles[r.x][r.y] = mapColor.key("empty");
-    // check if dir is a valid direction
-    var validDir = _.some(this.getValidDirections(r.x,r.y), function(el){
-      return dir == el;
-    })
-    if (validDir) {
-      this.transform(r, dir)
-      this.tiles[r.x][r.y] = mapColor.key("robot");
+    if (r.lastMove >= (1/r.speed)) {
+      // continue
+      var dir = r.lambda.apply(null, this.getRobotData.call(this, r));
+      this.tiles[r.x][r.y] = mapColor.key("empty");
+      // check if dir is a valid direction
+      var validDir = _.some(this.getValidDirections(r.x,r.y), function(el){
+        return dir == el;
+      })
+      if (validDir) {
+        this.transform(r, dir)
+        for (var fn of this.stepLogicCbs) {
+          fn.call(this, r, dir);
+        }
+        this.tiles[r.x][r.y] = this.colorRobot.call(this, r);
+      } else {
+        this.level.endMessage = this.makeErrorMessage(r.x, r.y, getDirName(dir));
+        this.level.endLevelState = EndLevelState.LOSE;
+      }
+
+      r.lastMove = 1;
     } else {
-      this.level.endMessage = this.makeErrorMessage(r.x, r.y, getDirName(dir));
-      this.level.endLevelState = EndLevelState.LOSE;
+      // if the robot didn't move increment lastMove
+      r.lastMove++;
     }
+    
   }
 }
 /**
@@ -185,7 +216,7 @@ function Level1() {
   this.answers = [
     function(x, y, tiles, info) {
       // level 1, answer 1
-      return Dirs.R;
+      return Directions.RIGHT;
     },
     function(x, y, tiles, info) {
       // level 1, answer 2
@@ -235,41 +266,95 @@ Level2.prototype.testVictory = function() {
 }
 
 /**
+ * Special Map for level 3
+ */
+function L3Map (w, h, robots, level) {
+  Map.call(this, w, h, robots, level)
+}
+L3Map.prototype = Object.create(Map.prototype);
+L3Map.prototype.colorRobot = function(robot) {
+  if(robot instanceof Dud) return mapColor.key("target");
+  else return mapColor.key("robot");
+}
+var robotFinished = false;
+/**
  * seek and destroy
  */
 function Level3() {
   var duds = [];
-  for (var i = 0; i < 2; i++){
+  // add duds
+  for (var i = 0; i < 10; i++){
     duds.push(new Dud(Math.floor(Math.random()*6), Math.floor(Math.random()*6)));
   }
-  var map = new Map(7,7, [new Robot(0,0)].concat(duds) , this);
+  var map = new L3Map(7,7, [new Robot(0,0)].concat(duds) , this);
   Level.call(this, 5, map);
   this.name = "Seek and Destroy";
   this.answers = [
-    function(x, y, tiles, info) {
-      // level 3, answer 1
-      return Dirs.C;
-    }
+     function(x, y, neighbors,validDirections, data, finished) {
+      var n = Math.floor(Math.random() * (validDirections.length));
+      data.deltaSum = data.deltaSum || 0;
+      data.deltaCount = data.deltaCount || 0;
+      data.lastSeen = data.lastSeen || 0;
+      var duds = neighbors.filter(function(t) {
+        return t == 1;
+      })
+
+      // logic to decide whether to finish or not
+      if (duds.length >= 1) {
+        data.deltaSum += data.lastSeen;
+        data.deltaCount += 1;
+        data.lastSeen = 0;
+      }
+      // if the difference 
+      if (Math.abs((data.deltaSum/data.deltaCount) - data.lastSeen) > 20) {
+        finished();
+      }
+      data.lastSeen++;
+      console.log(data);
+      return validDirections[n];
+    } 
   ]
+
+  // a function for the robot to call when they are done.
+  function finished() {
+    window.robotFinished = true;
+  }
   // set map.getRobotData
   this.map.getRobotData = function(robot) {
     // this = this.get
     return [robot.x, robot.y, this.getNeighbors(robot.x, robot.y)
-          , this.getValidDirections(robot.x, robot.y), robot.state]
+          , this.getValidDirections(robot.x, robot.y), robot.state, finished]
   }
 
   // change the default setAI behavior
   this.map.setAI = function (fn) {
     this.robots[0].lambda = fn;
   }
+
+  // add functionality to remove a dud if the robot moves on it
+  this.map.stepLogicCbs.push(function(r, dir){
+    // this is set to the map
+    if (r instanceof Dud) {
+      var dudToDestroy = [];
+      if (r.x == this.robots[0].x && r.y == this.robots[0].y) dudToDestroy.push(r);
+      this.robots = _.difference(this.robots, dudToDestroy);
+    }
+  })
 }
 Level3.prototype = Object.create(Level.prototype);
 Level3.prototype.testVictory = function() {
-  return false;
+  if (robotFinished) {
+    if (this.map.robots.length == 1) return true;
+    else {
+      this.endMessage = "There were still " + (this.map.robots.length - 1) + " other robots left to find"
+      this.endLevelState = EndLevelState.LOSE;
+    }
+  }
 }
 
 function Dud (xVal, yVal) {
   Robot.call(this, xVal, yVal);
+  this.speed = 1;
   this.lambda = function(x, y, neighbors,validDirections, data) {
     var n = Math.floor(Math.random() * (validDirections.length));
     return validDirections[n];
