@@ -285,6 +285,7 @@ var robotFinished = false;
  * seek and destroy
  */
 function Level3() {
+  robotFinished = false;
   var duds = [];
   // add duds
   for (var i = 0; i < 10; i++) {

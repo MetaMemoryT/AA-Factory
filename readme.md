@@ -4,6 +4,16 @@ If you use the step feature in level 3 you will notice that the robot disappears
 This could be to do with the step logic callback added in the constructor of level3 or just a rendering problem. Note, the map for level3 is an extended class called L3Map which changes the default coloring behavior for a robot.
 #### partial fix
 Part of the problem was that L3Map.prototype.colorRobot would return the `target` color if there was a dud. By only returning target color when there was a dud AND the dud wasn't in the same place as the robot some of the problem was fixed.
+
+## FIXED Run Game button doesn't fully reset the game
+### FIXED
+just had to reset window.robotFinished in level constructor
+### to reproduce
+- run level3 to completion.
+- press run game
+- the robot exits after the first turn
+
+
 ## creation of user AI
 Not using server approach because it is too technical for our specific audience.
 ### inline editor
