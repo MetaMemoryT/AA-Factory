@@ -301,7 +301,9 @@ function Level3() {
       data.deltaSum = data.deltaSum || 0;
       data.deltaCount = data.deltaCount || 0;
       data.lastSeen = data.lastSeen || 0;
+      var dudDir; 
       var duds = neighbors.filter(function(t) {
+        if (t == 1) dudDir = i;
         return t == 1;
       })
 
@@ -315,7 +317,7 @@ function Level3() {
       }
       data.lastSeen++;
       console.log(data);
-      return validDirections[n];
+      return (dudDir || validDirections[n]); 
     }
   ]
 
