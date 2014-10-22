@@ -64,7 +64,7 @@ function setLevel(levelI) {
 
   qs('#forward-button').disabled = false;
   qs('#back-button').disabled = false;
-  qs('#chapterName').innerHTML = "L" + (levelI + 1) + ": " + s.currentLevel.name;
+  qs('#levelName').innerHTML = "L" + (levelI + 1) + ": " + s.currentLevel.name;
   if (levelI == (levels.length - 1)) qs('#forward-button').disabled = true;
   if (levelI == 0) qs('#back-button').disabled = true;
 }
