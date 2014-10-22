@@ -273,7 +273,7 @@ function L3Map (w, h, robots, level) {
 }
 L3Map.prototype = Object.create(Map.prototype);
 L3Map.prototype.colorRobot = function(robot) {
-  if(robot instanceof Dud) return mapColor.key("target");
+  if(robot instanceof Dud && (robot.x != this.robots[0].x || robot.y != this.robots[0].y)) return mapColor.key("target");
   else return mapColor.key("robot");
 }
 var robotFinished = false;
@@ -330,10 +330,12 @@ function Level3() {
   }
 
   // add functionality to remove a dud if the robot moves on it
+  var self = this;
   this.map.stepLogicCbs.push(function(r, dir){
     // this is set to the map
     if (r instanceof Dud) {
       var dudToDestroy = [];
+      console.log(self.map.robots.length);
       if (r.x == this.robots[0].x && r.y == this.robots[0].y) dudToDestroy.push(r);
       this.robots = _.difference(this.robots, dudToDestroy);
     }
