@@ -302,7 +302,7 @@ function Level3() {
       data.deltaCount = data.deltaCount || 0;
       data.lastSeen = data.lastSeen || 0;
       var dudDir; 
-      var duds = neighbors.filter(function(t) {
+      var duds = neighbors.filter(function(t, i) {
         if (t == 1) dudDir = i;
         return t == 1;
       })
