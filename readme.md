@@ -5,10 +5,10 @@ This could be to do with the step logic callback added in the constructor of lev
 #### partial fix
 Part of the problem was that L3Map.prototype.colorRobot would return the `target` color if there was a dud. By only returning target color when there was a dud AND the dud wasn't in the same place as the robot some of the problem was fixed.
 
-## FIXED Run Game button doesn't fully reset the game
-### FIXED
+### FIXED Run Game button doesn't fully reset the game
+#### FIXED
 just had to reset window.robotFinished in level constructor
-### to reproduce
+#### to reproduce
 - run level3 to completion.
 - press run game
 - the robot exits after the first turn
@@ -31,6 +31,9 @@ bower install
 ### Bugs (- when solved)
 "Run Game" on level 3, "Run Game" again and it fails, likely some of the new global vars are not being reset.
 
+### Integration Problems
+6cc7529619f56b07759373ed03ef53d25c79cfe5 lost 3 lines from readme.md
+
 ### roadmap
 - Pause Resume with correct disabled/enabled
 - Submit Code -> Save + Load
@@ -38,6 +41,9 @@ bower install
 - bring back alert win / lose: out of bounds
 - email
 - 3 levels working
+- codemirror
+- console.log
+- fix changeOrRestartLevel
 decision making
 inter-agent communication
 seek and destroy
@@ -70,9 +76,10 @@ function move(sensors, actuators, state) {
 http://51lica.com/wp-content/uploads/2012/05/Artificial-Intelligence-A-Modern-Approach-3rd-Edition.pdf, chapter 2
 
 ## level4
+Does each client have a unique destination?
 level 4 is going to be a taxi driver Robot.
 
-Each Taxi Driver (robot) 
+Each Taxi Driver (robot)
     * has a list of clients (an array, managed by the level, containing the coordinates of the clients)
     * must move each client to their destination ()
     * should complete goals as fast as possible
