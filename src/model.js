@@ -101,12 +101,16 @@ Map.prototype.setAI = function(fn) {
 }
 
 Map.prototype.step = function() {
+  var setTiles = [];
   for (var i = 0; i < this.robots.length; i++) {
     var r = this.robots[i];
     if (r.lastMove >= (1 / r.speed)) {
       // continue
       var dir = r.lambda.apply(null, this.getRobotData.call(this, r));
-      this.tiles[r.x][r.y] = mapColor.key("empty");
+      // at the time of evaluation, a robot might have moved to the current robot's previous location
+      var locationAlreadySet = _.any(setTiles, function(t){return (t.x == r.x && t.y == r.y)});
+      // if the current location has been assigned a new value, don't change it
+      this.tiles[r.x][r.y] = (locationAlreadySet) ? this.tiles[r.x][r.y] : mapColor.key("empty");
       // check if dir is a valid direction
       var validDir = _.some(this.getValidDirections(r.x, r.y), function(el) {
         return dir == el;
@@ -116,6 +120,8 @@ Map.prototype.step = function() {
         for (var fn of this.stepLogicCbs) {
           fn.call(this, r, dir);
         }
+        // push this location to the setTiles
+        setTiles.push({x:r.x, y:r.y});
         this.tiles[r.x][r.y] = this.colorRobot.call(this, r);
       } else {
         this.level.endMessage = this.makeErrorMessage(r.x, r.y, getDirName(dir));
