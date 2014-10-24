@@ -76,7 +76,15 @@ function move(sensors, actuators, state) {
 http://51lica.com/wp-content/uploads/2012/05/Artificial-Intelligence-A-Modern-Approach-3rd-Edition.pdf, chapter 2
 
 ## level4
+### questions
 Does each client have a unique destination?
+  > The locations don't have to be unique.
+Therefore, lets have 1 random destination.
+
+Do clients start on different locations?
+  > Yes, I think they could be randomly placed.
+
+### description
 level 4 is going to be a taxi driver Robot.
 
 Each Taxi Driver (robot)
