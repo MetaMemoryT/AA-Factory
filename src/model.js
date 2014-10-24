@@ -319,7 +319,7 @@ function Level3() {
         data.deltaCount += 1;
         data.lastSeen = 0;
       }
-      if (Math.abs((data.deltaSum / data.deltaCount) - data.lastSeen) > 20) {
+      if (Math.abs((data.deltaSum / data.deltaCount) - data.lastSeen) > 10) {
         finished();
       }
       data.lastSeen++;
