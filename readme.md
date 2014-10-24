@@ -31,6 +31,9 @@ bower install
 ### Bugs (- when solved)
 "Run Game" on level 3, "Run Game" again and it fails, likely some of the new global vars are not being reset.
 
+### Integration Problems
+6cc7529619f56b07759373ed03ef53d25c79cfe5 lost 3 lines from readme.md
+
 ### roadmap
 - Pause Resume with correct disabled/enabled
 - Submit Code -> Save + Load
@@ -38,6 +41,9 @@ bower install
 - bring back alert win / lose: out of bounds
 - email
 - 3 levels working
+- codemirror
+- console.log
+- fix changeOrRestartLevel
 decision making
 inter-agent communication
 seek and destroy
@@ -72,7 +78,7 @@ http://51lica.com/wp-content/uploads/2012/05/Artificial-Intelligence-A-Modern-Ap
 ## level4
 level 4 is going to be a taxi driver Robot.
 
-Each Taxi Driver (robot) 
+Each Taxi Driver (robot)
     * has a list of clients (an array, managed by the level, containing the coordinates of the clients)
     * must move each client to their destination ()
     * should complete goals as fast as possible
