@@ -5,10 +5,10 @@ This could be to do with the step logic callback added in the constructor of lev
 #### partial fix
 Part of the problem was that L3Map.prototype.colorRobot would return the `target` color if there was a dud. By only returning target color when there was a dud AND the dud wasn't in the same place as the robot some of the problem was fixed.
 
-## FIXED Run Game button doesn't fully reset the game
-### FIXED
+### FIXED Run Game button doesn't fully reset the game
+#### FIXED
 just had to reset window.robotFinished in level constructor
-### to reproduce
+#### to reproduce
 - run level3 to completion.
 - press run game
 - the robot exits after the first turn
@@ -76,6 +76,7 @@ function move(sensors, actuators, state) {
 http://51lica.com/wp-content/uploads/2012/05/Artificial-Intelligence-A-Modern-Approach-3rd-Edition.pdf, chapter 2
 
 ## level4
+Does each client have a unique destination?
 level 4 is going to be a taxi driver Robot.
 
 Each Taxi Driver (robot)
