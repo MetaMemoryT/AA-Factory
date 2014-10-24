@@ -117,9 +117,7 @@ Map.prototype.step = function() {
       })
       if (validDir) {
         this.transform(r, dir)
-        for (var fn of this.stepLogicCbs) {
-          fn.call(this, r, dir);
-        }
+
         // push this location to the setTiles
         setTiles.push({x:r.x, y:r.y});
         this.tiles[r.x][r.y] = this.colorRobot.call(this, r);
@@ -132,6 +130,9 @@ Map.prototype.step = function() {
     } else {
       // if the robot didn't move increment lastMove
       r.lastMove++;
+    }
+    for (var fn of this.stepLogicCbs) {
+      fn.call(this, r, dir);
     }
 
   }
@@ -342,15 +343,14 @@ function Level3() {
     this.robots[0].lambda = fn;
   }
 
-  // add functionality to remove a dud if the robot moves on it
-  var self = this;
   this.map.stepLogicCbs.push(function(r, dir){
     // this is set to the map
     if (r instanceof Dud) {
       var dudToDestroy = [];
-      console.log(self.map.robots.length);
+      
       if (r.x == this.robots[0].x && r.y == this.robots[0].y) dudToDestroy.push(r);
       this.robots = _.difference(this.robots, dudToDestroy);
+      console.log(this.robots.length);
     }
   })
 }
@@ -367,7 +367,7 @@ Level3.prototype.testVictory = function() {
 
 function Dud(xVal, yVal) {
   Robot.call(this, xVal, yVal);
-  this.speed = 1;
+  this.speed = 0.5;
   this.lambda = function(x, y, neighbors, validDirections, data) {
     var n = Math.floor(Math.random() * (validDirections.length));
     return validDirections[n];
