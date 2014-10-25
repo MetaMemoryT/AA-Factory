@@ -1,5 +1,5 @@
 ## Features needed for Presentation:
-### BUG Sometimes The Robot Disappears in level3
+### FIXED Sometimes The Robot Disappears in level3
 If you use the step feature in level 3 you will notice that the robot disappears for a turn or 2.
 This could be to do with the step logic callback added in the constructor of level3 or just a rendering problem. Note, the map for level3 is an extended class called L3Map which changes the default coloring behavior for a robot.
 #### partial fix
