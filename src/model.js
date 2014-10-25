@@ -39,6 +39,7 @@ var mapColor = new BiMap();
 mapColor.push("empty", 0);
 mapColor.push("target", 1);
 mapColor.push("robot", 2);
+mapColor.push("destination", 3);
 
 function Robot(x, y) {
   this.x = x;
@@ -90,7 +91,7 @@ function Map(x, y, robots, level) {
  * @return {number}       Color to be returned
  */
 Map.prototype.colorRobot = function(robot) {
-  return mapColor.key("robot")
+  return mapColor.key("robot");
 }
 Map.prototype.makeErrorMessage = function(x, y, dir) {
   return "Robot at (" + x + "," + y + ") went out of bounds heading " + dir + ".";
@@ -391,6 +392,13 @@ function Level4() {
       return null;
     }
   ]
+
+  // create a destination the taxi must deliver all clients to.
+  this.destination = [Math.floor(Math.random() * this.map.width),
+                      Math.floor(Math.random() * this.map.height)
+                      ]
+
+  this.map.tiles[this.destination[0]][this.destination[1]] = mapColor.key("destination");
 }
 Level4.prototype = Object.create(Level.prototype);
 
