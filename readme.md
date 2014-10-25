@@ -80,14 +80,21 @@ http://51lica.com/wp-content/uploads/2012/05/Artificial-Intelligence-A-Modern-Ap
 ### questions
 Does each client have a unique destination?
   > The locations don't have to be unique.
-Therefore, lets have 1 random destination.
 
 Do clients start on different locations?
   > Yes, I think they could be randomly placed.
 
-Does the AI know the destination at the start, or does he have to find it? "Taxi driver" title implies he knows the destination, and the client locations.
+Does the AI know the destination(s) at the start, or does he have to find it? "Taxi driver" title implies he knows the destination, and the client locations.
 
-Do the clients move randomly?
+Do the clients move randomly? Do they move towards their destinations?
+
+Does each client have its own destination? Or do they all have the same destination?
+
+If each clients has its own destination, when should this information become availible?
+
+Should clients spawn randomly during the level, or all at the beginning?
+
+What is the "AI" part of the algorithm? Give me rough sudo-code of the correct answer.
 ### description
 level 4 is going to be a taxi driver Robot.
 
