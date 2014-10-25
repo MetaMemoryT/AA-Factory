@@ -44,6 +44,7 @@ bower install
 - codemirror
 - console.log
 - fix changeOrRestartLevel
+level 4 -> 5 random clients
 decision making
 inter-agent communication
 seek and destroy
@@ -84,6 +85,9 @@ Therefore, lets have 1 random destination.
 Do clients start on different locations?
   > Yes, I think they could be randomly placed.
 
+Does the AI know the destination at the start, or does he have to find it? "Taxi driver" title implies he knows the destination, and the client locations.
+
+Do the clients move randomly?
 ### description
 level 4 is going to be a taxi driver Robot.
 
