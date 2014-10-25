@@ -73,6 +73,9 @@ td {
 .target {
   background-color: green;
 }
+.destination {
+  background-color: blue;
+}
 .CodeMirror {
   border-top: 1px solid black;
   border-bottom: 1px solid black;
