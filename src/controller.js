@@ -76,6 +76,14 @@ function insertAnswerIndex(i) {
   }));
 }
 
+var hint = 0;
+function nextHint() {
+  hint = (hint == s.currentLevel.answers.length - 1) ? 0 : hint + 1;
+  s.editor.setValue(js_beautify(s.currentLevel.answers[hint].toString(), {
+    'indent_size': 2
+  }))
+}
+
 function changeLevel(num) {
   var i = qs('core-animated-pages').selectedIndex;
   var levelI = i + num; // zero-indexed level value

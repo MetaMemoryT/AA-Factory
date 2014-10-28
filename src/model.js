@@ -331,6 +331,23 @@ function Level3() {
       data.lastSeen++;
       console.log(data);
       return (dudDir || validDirections[n]);
+    },
+    function(x, y, neighbors, validDirections, data, finished) {
+      var dudDir;
+      // loop through neighbors, if there's a dud, break
+      for (var dir = 0; dir < neighbors.length; dir ++) {
+        if (neighbors[dir] == 1) {
+          dudDir = dir;
+          break;
+        }
+      }
+
+      // if there is a dud, move in that direction
+      if (dudDir) {
+        return dudDir;
+      } else {
+        return Directions.CENTER;
+      } 
     }
   ]
 
